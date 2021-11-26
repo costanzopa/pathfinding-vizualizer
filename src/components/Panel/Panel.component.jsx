@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Node } from '..';
+import { dijkstra } from '../../algorithms/dijkstra';
 import './Panel.styles.css';
 
 const START_NODE_ROW = 10;
@@ -11,7 +12,7 @@ const Panel = () => {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseIsPressed] = useState(false);
 
-  const getInitialGrid = () => {
+  const getInitialGrid = useCallback(() => {
     const grid = [];
     for (let row = 0; row < 20; row++) {
       const currentRow = [];
@@ -21,7 +22,12 @@ const Panel = () => {
       grid.push(currentRow);
     }
     return grid;
-  };
+  }, []);
+
+  useEffect(() => {
+    const grid = getInitialGrid();
+    setGrid(grid);
+  }, [getInitialGrid]);
 
   const createNode = (col, row) => {
     return {
@@ -36,7 +42,17 @@ const Panel = () => {
     };
   };
 
-  const visualizeDijkstra = () => {};
+  const getNodesInShortestPathOrder = (finishNode) => {};
+
+  const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {};
+
+  const visualizeDijkstra = () => {
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  };
 
   const getNewGridWithWallToggled = (grid, row, col) => {
     const newGrid = grid.slice();
@@ -64,11 +80,6 @@ const Panel = () => {
   const handleMouseUp = () => {
     setMouseIsPressed(false);
   };
-
-  useEffect(() => {
-    const grid = getInitialGrid();
-    setGrid(grid);
-  }, []);
 
   return (
     <>
