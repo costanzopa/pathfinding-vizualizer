@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Node } from '..';
-import { dijkstra } from '../../algorithms/dijkstra';
+import {
+  dijkstra,
+  getNodesInShortestPathOrder,
+} from '../../algorithms/dijkstra';
 import './Panel.styles.css';
 
 const START_NODE_ROW = 10;
@@ -24,10 +27,14 @@ const Panel = () => {
     return grid;
   }, []);
 
-  useEffect(() => {
-    const grid = getInitialGrid();
-    setGrid(grid);
+  const clearPanel = useCallback(() => {
+    const newGrid = getInitialGrid();
+    setGrid(newGrid);
   }, [getInitialGrid]);
+
+  useEffect(() => {
+    clearPanel();
+  }, [clearPanel]);
 
   const createNode = (col, row) => {
     return {
@@ -42,9 +49,31 @@ const Panel = () => {
     };
   };
 
-  const getNodesInShortestPathOrder = (finishNode) => {};
+  const animateShortestPath = (nodesInShortestPathOrder) => {
+    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+      setTimeout(() => {
+        const node = nodesInShortestPathOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-shortest-path';
+      }, 50 * i);
+    }
+  };
 
-  const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {};
+  const animateDijkstra = (visitedNodesInOrder, nodesInShortestPathOrder) => {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      if (i === visitedNodesInOrder.length) {
+        setTimeout(() => {
+          animateShortestPath(nodesInShortestPathOrder);
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-visited';
+      }, 10 * i);
+    }
+  };
 
   const visualizeDijkstra = () => {
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
@@ -86,6 +115,7 @@ const Panel = () => {
       <button onClick={() => visualizeDijkstra()}>
         Visualize Dijkstra's Algorithm
       </button>
+      <button onClick={() => clearPanel()}>Clear Panel</button>
       <div className="grid">
         {grid.map((row, rowIdx) => {
           return (
