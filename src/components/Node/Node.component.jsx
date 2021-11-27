@@ -1,16 +1,7 @@
 import React from 'react';
 import './Node.styles.css';
 
-const Node = ({
-  col,
-  isFinish,
-  isStart,
-  isWall,
-  onMouseDown,
-  onMouseEnter,
-  onMouseUp,
-  row,
-}) => {
+const Node = ({ col, isFinish, isStart, isWall, row }) => {
   const extraClassName = isFinish
     ? 'node-finish'
     : isStart
@@ -19,13 +10,7 @@ const Node = ({
     ? 'node-wall'
     : '';
   return (
-    <div
-      id={`node-${row}-${col}`}
-      className={`node ${extraClassName}`}
-      onMouseDown={() => onMouseDown(row, col)}
-      onMouseEnter={() => onMouseEnter(row, col)}
-      onMouseUp={() => onMouseUp()}
-    ></div>
+    <div id={`node-${row}-${col}`} className={`node ${extraClassName}`}></div>
   );
 };
 export default Node;
