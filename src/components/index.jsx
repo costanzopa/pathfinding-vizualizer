@@ -1,2 +1,2 @@
-export { default as Node } from './Node';
-export { default as Panel } from './Board';
+export { default as GridCell } from './GridCell';
+export { default as Grid } from './Grid';
