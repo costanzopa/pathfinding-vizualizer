@@ -13,6 +13,8 @@ const FINISH_NODE_COL = 35;
 
 const Panel = () => {
   const [grid, setGrid] = useState([]);
+  const [mouseIsPressed, setMouseIsPressed] = useState(false);
+  
   const [startNode, setStartNode] = useState({
     row: START_NODE_ROW,
     col: START_NODE_COL,
